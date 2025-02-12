@@ -109,6 +109,9 @@ export default function AdminDashboard() {
         position: 'bottom' as const,
         labels: {
           color: currentTheme === 'dark' ? '#e5e7eb' : '#374151',
+          font: {
+            size: 12
+          }
         },
       },
     },
@@ -116,6 +119,9 @@ export default function AdminDashboard() {
       x: {
         ticks: {
           color: currentTheme === 'dark' ? '#e5e7eb' : '#374151',
+          font: {
+            size: 10
+          }
         },
         grid: {
           color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
@@ -124,6 +130,9 @@ export default function AdminDashboard() {
       y: {
         ticks: {
           color: currentTheme === 'dark' ? '#e5e7eb' : '#374151',
+          font: {
+            size: 10
+          }
         },
         grid: {
           color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
@@ -145,7 +154,7 @@ export default function AdminDashboard() {
 
   return (
     <motion.div 
-      className="space-y-6"
+      className="space-y-4 sm:space-y-6 p-4 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -170,7 +179,7 @@ export default function AdminDashboard() {
           </motion.p>
         </div>
         <motion.button
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors text-sm sm:text-base"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-colors text-sm sm:text-base w-full sm:w-auto justify-center sm:justify-start"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => setShowConditionForm(true)}
@@ -217,7 +226,7 @@ export default function AdminDashboard() {
           variants={fadeInUp}
         >
           <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Inventory Overview</h2>
-          <div className="h-64">
+          <div className="h-64 sm:h-80">
             <Pie data={inventoryData} options={chartOptions} />
           </div>
         </motion.div>
@@ -226,7 +235,7 @@ export default function AdminDashboard() {
           variants={fadeInUp}
         >
           <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Item Condition Report</h2>
-          <div className="h-64">
+          <div className="h-64 sm:h-80">
             <Bar data={itemConditionData} options={chartOptions} />
           </div>
         </motion.div>
@@ -238,7 +247,7 @@ export default function AdminDashboard() {
           variants={fadeInUp}
         >
           <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Borrowing Status</h2>
-          <div className="h-64">
+          <div className="h-64 sm:h-80">
             <Line data={borrowingStatusData} options={chartOptions} />
           </div>
         </motion.div>
@@ -247,7 +256,7 @@ export default function AdminDashboard() {
           variants={fadeInUp}
         >
           <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Most Borrowed Items</h2>
-          <div className="h-64">
+          <div className="h-64 sm:h-80">
             <Bar data={mostBorrowedItemsData} options={chartOptions} />
           </div>
         </motion.div>
@@ -262,11 +271,11 @@ export default function AdminDashboard() {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-700">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Borrower</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Item</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Expected Return</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Condition Before</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Condition After</th>
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Borrower</th>
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Item</th>
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Expected Return</th>
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Condition Before</th>
+                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Condition After</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -277,11 +286,11 @@ export default function AdminDashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{activity.borrower}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{activity.item}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{activity.expectedReturn}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{activity.conditionBefore}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-gray-900 dark:text-gray-100">{activity.conditionAfter}</td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{activity.borrower}</td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{activity.item}</td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{activity.expectedReturn}</td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{activity.conditionBefore}</td>
+                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{activity.conditionAfter}</td>
                 </motion.tr>
               ))}
             </tbody>
@@ -293,8 +302,8 @@ export default function AdminDashboard() {
         className="bg-red-100 dark:bg-red-900 border-l-4 border-red-500 p-4 sm:p-6 rounded-lg"
         variants={fadeInUp}
       >
-        <div className="flex items-center">
-          <AlertTriangle className="h-6 w-6 text-red-500 dark:text-red-400 mr-4" />
+        <div className="flex items-start sm:items-center flex-col sm:flex-row">
+          <AlertTriangle className="h-6 w-6 text-red-500 dark:text-red-400 mr-0 sm:mr-4 mb-2 sm:mb-0" />
           <div>
             <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">Alerts & Notifications</h3>
             <p className="text-red-700 dark:text-red-300 mt-1">🔴 2 items are overdue!</p>
@@ -307,7 +316,7 @@ export default function AdminDashboard() {
       <AnimatePresence>
         {showConditionForm && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { Package, LayoutGrid, Box, FileText, ClipboardList, LogOut, Search, Bell, ChevronDown, Menu, AlertTriangle, Sun, Moon } from 'lucide-react'
+import { Package, LayoutGrid, Box, FileText, ClipboardList, LogOut, Search, Bell, ChevronDown, Menu, AlertTriangle, Sun, Moon, X } from 'lucide-react'
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -18,22 +18,23 @@ export default function ProgramManagerLayout({
   children: React.ReactNode
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
+    const darkModePreference = localStorage.getItem('darkMode')
+    setIsDarkMode(darkModePreference === 'true')
+
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-      setIsSidebarOpen(window.innerWidth >= 768)
+      if (window.innerWidth >= 1024) {
+        setIsSidebarOpen(true)
+      } else {
+        setIsSidebarOpen(false)
+      }
     }
 
     handleResize()
     window.addEventListener("resize", handleResize)
-
-    const darkModePreference = localStorage.getItem('darkMode')
-    setIsDarkMode(darkModePreference === 'true')
-
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
@@ -58,14 +59,22 @@ export default function ProgramManagerLayout({
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       {/* Sidebar */}
       <aside
-        className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ${
-          isSidebarOpen ? "w-64" : "w-0"
-        } ${isMobile ? "fixed inset-y-0 left-0 z-50 overflow-hidden" : ""}`}
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:relative lg:translate-x-0`}
       >
         <div className="flex flex-col h-full">
-          <div className="flex items-center gap-2 px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-            <Package className="h-6 w-6 text-primary-600 dark:text-primary-400" />
-            <span className="font-semibold text-gray-800 dark:text-gray-200">Stock Control</span>
+          <div className="flex items-center justify-between gap-2 px-4 py-5 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center gap-2">
+              <Package className="h-6 w-6 text-primary-600 dark:text-primary-400" />
+              <span className="font-semibold text-gray-800 dark:text-gray-200">Stock Control</span>
+            </div>
+            <button
+              onClick={toggleSidebar}
+              className="lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              <X className="h-6 w-6" />
+            </button>
           </div>
 
           <nav className="flex-1 p-4 overflow-y-auto">
@@ -102,10 +111,14 @@ export default function ProgramManagerLayout({
         <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-4 transition-colors duration-300">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <button onClick={toggleSidebar} className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors md:hidden">
+              <button 
+                onClick={toggleSidebar} 
+                className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-400 rounded-lg p-1"
+                aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+              >
                 <Menu className="h-6 w-6" />
               </button>
-              <div className="relative flex-1 max-w-xl">
+              <div className="relative flex-1 max-w-xl hidden sm:block">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
                 <input
                   type="search"
@@ -130,7 +143,7 @@ export default function ProgramManagerLayout({
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
               <button className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-400 rounded-lg p-1">
-                <img src="https://v0.dev/placeholder-user.jpg" alt="Admin" className="w-8 h-8 rounded-full" />
+                <img src="https://v0.dev/placeholder-user.jpg" alt="Program Manager" className="w-8 h-8 rounded-full" />
                 <span className="hidden md:inline">Program Manager</span>
                 <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
               </button>
