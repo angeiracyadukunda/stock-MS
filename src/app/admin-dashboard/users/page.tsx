@@ -6,8 +6,9 @@ import { DeleteConfirmationModal } from "../../components/DeleteConfirmationModa
 
 interface User {
   id: string
-  name: string
+  fullname: string
   email: string
+  phoneNumber: string
   role: string
   status: "active" | "inactive"
   lastLogin: string
@@ -17,24 +18,27 @@ export default function UserManagementPage() {
   const [users, setUsers] = useState<User[]>([
     {
       id: "USR001",
-      name: "John Doe",
+      fullname: "John Doe",
       email: "john.doe@example.com",
+      phoneNumber: "123-456-7890",
       role: "Admin",
       status: "active",
       lastLogin: "2024-02-10 09:30 AM",
     },
     {
       id: "USR002",
-      name: "Jane Smith",
+      fullname: "Jane Smith",
       email: "jane.smith@example.com",
+      phoneNumber: "123-456-7890",
       role: "Manager",
       status: "active",
       lastLogin: "2024-02-09 02:15 PM",
     },
     {
       id: "USR003",
-      name: "Bob Johnson",
+      fullname: "Bob Johnson",
       email: "bob.johnson@example.com",
+      phoneNumber: "123-456-7890",
       role: "User",
       status: "inactive",
       lastLogin: "2024-01-30 11:45 AM",
@@ -52,8 +56,9 @@ export default function UserManagementPage() {
 
   const filteredUsers = users.filter(
     (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.phoneNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.id.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
@@ -159,8 +164,9 @@ export default function UserManagementPage() {
               {filteredUsers.map((user) => (
                 <tr key={user.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{user.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.fullname}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.email}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.phoneNumber}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{user.role}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
@@ -212,8 +218,9 @@ function UserModal({ onClose, onSave, title, user }: UserModalProps) {
       id: `USR${Math.floor(Math.random() * 1000)
         .toString()
         .padStart(3, "0")}`,
-      name: "",
+      fullname: "",
       email: "",
+      phoneNumber: "",
       role: "User",
       status: "active",
       lastLogin: new Date().toLocaleString(),
@@ -237,8 +244,8 @@ function UserModal({ onClose, onSave, title, user }: UserModalProps) {
             type="text"
             placeholder="Full Name"
             className="w-full p-2 border rounded"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            value={formData.fullname}
+            onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
             required
           />
           <input
@@ -249,6 +256,17 @@ function UserModal({ onClose, onSave, title, user }: UserModalProps) {
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
           />
+          <input
+            type="tel"
+            placeholder="Phone Number"
+            className="w-full p-2 border rounded"
+            value={formData.phoneNumber}
+            onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+            pattern="[0-9]{10,15}"  // Allows numbers between 10-15 digits
+            title="Please enter a valid phone number"
+            required
+          />
+
           <select
             className="w-full p-2 border rounded"
             value={formData.role}
