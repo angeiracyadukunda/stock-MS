@@ -1,8 +1,11 @@
 import React from 'react'
+import LoginPage from './login/page'
 
 const page = () => {
   return (
-    <div>hello </div>
+    <div>
+      <LoginPage/>  
+    </div>
   )
 }
 
