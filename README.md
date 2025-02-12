@@ -12,7 +12,7 @@ Framework: Next.js (React.js)
 Styling: Tailwind CSS
 Language: TypeScript
 Live Demo
-Experience the application live at: https://frontend.example.com
+Experience the application live at: https://inventory-ange.vercel.app/
 
 Getting Started
 Follow these instructions to set up and run the frontend application locally.
@@ -24,7 +24,7 @@ Installation Steps
 Clone the Repository:
 
 
-git clone https://github.com/yourusername/xyz-inventory-frontend.git
+git clone https://github.com/angeiracyadukunda/inventory-ange.git
 cd xyz-inventory-frontend
 Install Dependencies:
 
@@ -33,16 +33,16 @@ npm install
 
 
 npm run dev
-Access the application at http://localhost:3000.
+Access the application at http://localhost:3001.
 Building for Production
 To create an optimized production build:
 
 npm run build
 npm start
-The application will run on http://localhost:3000.
+The application will run on http://localhost:3001.
 
 Deployment
-The frontend application is deployed at: https://frontend.example.com
+The frontend application is deployed at: https://inventory-ange.vercel.app/
 
 
 
