@@ -31,18 +31,14 @@ export default function AdminDashboardLayout({
 
     useEffect(() => {
         const handleResize = () => {
-            setIsMobile(window.innerWidth < 768)
-            if (window.innerWidth < 768) {
-                setIsSidebarOpen(false)
-            } else {
-                setIsSidebarOpen(true)
-            }
+            const isMobileView = window.innerWidth < 768
+            setIsMobile(isMobileView)
+            setIsSidebarOpen(!isMobileView)
         }
 
         handleResize()
         window.addEventListener("resize", handleResize)
 
-        // Check for dark mode preference in local storage
         const darkModePreference = localStorage.getItem('darkMode')
         setIsDarkMode(darkModePreference === 'true')
 
@@ -50,13 +46,11 @@ export default function AdminDashboardLayout({
     }, [])
 
     useEffect(() => {
-        // Apply dark mode to the document
         if (isDarkMode) {
             document.documentElement.classList.add('dark')
         } else {
             document.documentElement.classList.remove('dark')
         }
-        // Save preference to local storage
         localStorage.setItem('darkMode', isDarkMode.toString())
     }, [isDarkMode])
 
@@ -68,29 +62,34 @@ export default function AdminDashboardLayout({
         setIsDarkMode(!isDarkMode)
     }
 
+
+    
+
     return (
-        <div className={`flex h-screen ${isDarkMode ? 'dark' : ''}`}>
+        <div className="flex h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
             {/* Sidebar */}
             <aside
-                className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ${isSidebarOpen ? "w-64" : "w-0"
-                    } ${isMobile ? "absolute z-10 h-full" : ""}`}
+                className={`bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ${
+                    isSidebarOpen ? "w-64" : "w-16"
+                } ${isMobile ? "fixed inset-y-0 left-0 z-50 overflow-hidden" : ""}`}
             >
                 <div className="flex flex-col h-full">
-                    <div className="flex items-center gap-2 px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-                        <Package className="h-6 w-6 text-[#6B4BFF]" />
+                    <div className="flex items-center gap-2 px-4 py-5 border-b border-gray-200 dark:border-gray-700">
+                        <Package className="h-6 w-6 text-primary-600 dark:text-primary-400" />
                         {isSidebarOpen && <span className="font-semibold text-gray-800 dark:text-white">Stock Control</span>}
                     </div>
 
-                    <nav className="flex-1 p-4">
+                    <nav className="flex-1 p-4 overflow-y-auto">
                         <ul className="space-y-2">
                             {menuItems.map((item) => (
                                 <li key={item.label}>
                                     <Link
                                         href={item.href}
-                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${pathname === item.href
-                                                ? "bg-[#6B4BFF] text-white"
-                                                : "text-gray-600 dark:text-gray-300 hover:bg-[#6B4BFF]/5 hover:text-[#6B4BFF] dark:hover:bg-[#6B4BFF]/20 dark:hover:text-[#8B6FFF]"
-                                            }`}
+                                        className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                                            pathname === item.href
+                                                ? "bg-primary-600 text-white dark:bg-primary-700"
+                                                : "text-gray-700 dark:text-gray-300 hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:text-primary-600 dark:hover:text-primary-400"
+                                        }`}
                                     >
                                         <item.icon className="h-5 w-5" />
                                         {isSidebarOpen && <span>{item.label}</span>}
@@ -101,7 +100,7 @@ export default function AdminDashboardLayout({
                     </nav>
 
                     <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                        <button className="flex items-center gap-3 px-3 py-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 w-full transition-colors">
+                        <button className="flex items-center gap-3 px-3 py-2 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-900/20 dark:hover:text-red-400 w-full transition-colors">
                             <LogOut className="h-5 w-5" />
                             {isSidebarOpen && <span>Logout</span>}
                         </button>
@@ -110,33 +109,42 @@ export default function AdminDashboardLayout({
             </aside>
 
             {/* Main Content */}
-            <main className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900">
-                <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+            <div className="flex-1 flex flex-col overflow-hidden">
+                <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4 transition-colors duration-300">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                            <button onClick={toggleSidebar} className="text-gray-600 dark:text-gray-300 hover:text-[#6B4BFF] dark:hover:text-[#8B6FFF] transition-colors">
+                            <button 
+                                onClick={toggleSidebar} 
+                                className="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-400 rounded-lg p-1"
+                                aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+                            >
                                 <Menu className="h-6 w-6" />
                             </button>
-                            <div className="flex-1 max-w-2xl">
-                                <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
-                                    <input
-                                        type="search"
-                                        placeholder="Search inventory..."
-                                        className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B4BFF] focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                    />
-                                </div>
+                            <div className="relative flex-1 max-w-xl">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                                <input
+                                    type="search"
+                                    placeholder="Search inventory..."
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 transition-colors duration-300"
+                                />
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
-                            <button onClick={toggleDarkMode} className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#6B4BFF] dark:hover:text-[#8B6FFF] transition-colors">
+                            <button 
+                                onClick={toggleDarkMode} 
+                                className="p-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-400 rounded-full"
+                                aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+                            >
                                 {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                             </button>
-                            <button className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-[#6B4BFF] dark:hover:text-[#8B6FFF] transition-colors">
+                            <button 
+                                className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-400 rounded-full"
+                                aria-label="Notifications"
+                            >
                                 <Bell className="h-5 w-5" />
                                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
                             </button>
-                            <button className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
+                            <button className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-primary-600 dark:focus:ring-primary-400 rounded-lg p-1">
                                 <img src="https://v0.dev/placeholder-user.jpg" alt="Admin" className="w-8 h-8 rounded-full" />
                                 <span className="hidden md:inline">Admin</span>
                                 <ChevronDown className="h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -145,8 +153,10 @@ export default function AdminDashboardLayout({
                     </div>
                 </header>
 
-                <div className="p-6">{children}</div>
-            </main>
+                <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 dark:bg-gray-900 p-6 transition-colors duration-300">
+                    {children}
+                </main>
+            </div>
         </div>
     )
 }
