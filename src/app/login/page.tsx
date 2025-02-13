@@ -45,39 +45,48 @@ export default function LoginPage() {
     setLoading(true)
     setError("")
 
-    try {
-      const response = await fetch("http://localhost:8000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      })
+  try {
+  const response = await fetch("http://localhost:8000/api/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+  });
 
-      const data = await response.json()
+  const data = await response.json();
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          toast.error("Incorrect email or password")
-        } else {
-          toast.error(data.message || "Login failed")
-        }
-        throw new Error(data.message || "Login failed")
-      }
-
-      console.log("Login successful", data)
-      localStorage.setItem("token", data.token)
-
-      toast.success("Login successful! Redirecting to your dashboard...")
-
-      setTimeout(() => {
-        window.location.href = "/admin-dashboard/"
-      }, 2000)
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
+  if (!response.ok) {
+    if (response.status === 401) {
+      toast.error("Incorrect email or password");
+    } else {
+      toast.error(data.message || "Login failed");
     }
+    throw new Error(data.message || "Login failed");
+  }
+
+  console.log("Login successful", data);
+  localStorage.setItem("token", data.token);
+
+  toast.success("Login successful! Redirecting to your dashboard...");
+
+  // Determine the redirect URL based on user role
+  let redirectUrl = "/login"; // Default to login if role is not recognized
+  if (data.role === "admin") {
+    redirectUrl = "/admin-dashboard/";
+  } else if (data.role === "programManager") {
+    redirectUrl = "/program-manager-dashboard/";
+  }
+
+  setTimeout(() => {
+    window.location.href = redirectUrl;
+  }, 2000);
+} catch (err) {
+  setError(error);
+} finally {
+  setLoading(false);
+}
+
   }
 
   return (
